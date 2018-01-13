@@ -2,6 +2,7 @@
 #define CONFIGURATION_H
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
 
@@ -10,10 +11,15 @@ class Configuration{
 
 public :
 
+//This must go private
 int n;
 int m;
+vector<vector<int> > c;
+vector<vector<int> > a;
+vector<int>  b;
 
-Configuration(int n_machines, int n_jobs);
+
+Configuration(int n_machines, int n_jobs , vector<vector<int> > cost,vector<vector<int> > a, vector<int> bound );
 
 // To display the main points of the configuration
 void print();
