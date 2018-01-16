@@ -34,3 +34,10 @@ void Configuration::print(){
 cout << endl;
 
 }
+
+
+int Configuration::cost(Solution sol){
+
+
+  return 0;
+}

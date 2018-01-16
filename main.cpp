@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "configuration.h"
+#include "Solution.h"
 
 using namespace std;
 //First a bunch of utilitarian functions :
@@ -58,39 +59,39 @@ Configuration* readDataFile(char* nom_de_fichier){
     }
     fichier >> un_char   ;
 
-//Now reading a
+    //Now reading a
     fichier >> un_char >> un_char >> un_char;
-a = vector<vector<int> > (m);
-for (int j = 0; j < m; j++){
-  vector<int> tab(n);
-  fichier >> un_char;
-  for ( int i = 0; i < n ; i ++)
-  {
-    int u;
+    a = vector<vector<int> > (m);
+    for (int j = 0; j < m; j++){
+      vector<int> tab(n);
+      fichier >> un_char;
+      for ( int i = 0; i < n ; i ++)
+      {
+        int u;
 
-    fichier >>u;
-    tab[i] = u;
+        fichier >>u;
+        tab[i] = u;
+      }
+      fichier >> un_char >> un_char;
+      a[j] = tab;
+    }
+    fichier >> un_char  >> un_char ;
+
+
+
   }
+
+
   fichier >> un_char >> un_char;
-  a[j] = tab;
-}
-fichier >> un_char  >> un_char ;
+  b = vector<int> (m);
 
 
 
+  for (int j = 0; j < m ; ++j){
+    int u ;
+    fichier >> u;
+    b[j] = u;
   }
-
-
-    fichier >> un_char >> un_char;
-b = vector<int> (m);
-
-
-
-for (int j = 0; j < m ; ++j){
-int u ;
-fichier >> u;
-b[j] = u;
-}
 
 
   Configuration* config = new Configuration(n,m ,c, a , b);
@@ -98,18 +99,31 @@ b[j] = u;
   return config;
 }
 
-// HERE BEGINS THE MAIN
+// HERE BEGINS THE MAIN ///
 
 
 int main(int argv, char** args){
 
-  char fileName[] = "GAP-a05100.dat";
+  bool DEBUG = true;
 
-
+  char fileName[] = "data/GAP-a10100.dat";
 
   Configuration* config  = readDataFile(fileName);
 
-  config->print();
+  if(DEBUG){
+    config->print();
+   }
+  // NOw starts the tabu search
 
+  //First find an admissible solution
+  Solution sol = Solution(config->n, config->m);
+
+  sol.generate();
+
+  vector<Solution> tabuList = vector<Solution>();
+
+
+
+//Second find a way to improve it
   return 0;
 }

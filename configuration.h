@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <vector>
+
+#include "Solution.h"
+
 using namespace std;
 
 
@@ -21,9 +24,9 @@ vector<int>  b;
 
 Configuration(int n_machines, int n_jobs , vector<vector<int> > cost,vector<vector<int> > a, vector<int> bound );
 
+int cost(Solution solution);
 // To display the main points of the configuration
 void print();
-
 
 };
 #endif
