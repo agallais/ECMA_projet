@@ -35,12 +35,11 @@ void Configuration::print(){
     cout << this->b[j] << " ";
   }
 cout << endl;
-
+return;
 }
 
 
 int Configuration::cost(Solution sol){
-
 
   int total = 0;
 
@@ -49,14 +48,19 @@ int Configuration::cost(Solution sol){
     total += c[sol.affectation[i]][i];
   }
 
+
   // This is for the cost of the master problem, now we add the cost for violating the constraints
 
   int P = 0;
+  
   vector<int> constraintViolation = vector<int>(this->m);
+
   bool aConstraintIsViolated = false;
+  
   for (int j = 0; j < this->m; j++){
 
     int  totalForLignJ = 0;
+  
     for(int i = 0 ; i < this->n ; i++){
 
       if (sol.affectation[i] == j){
@@ -64,35 +68,52 @@ int Configuration::cost(Solution sol){
       }
 
     }
+  
     int si = b[j] - totalForLignJ;
-    aConstraintIsViolated = (si > 0) && aConstraintIsViolated;
+    
+    cout<< totalForLignJ<<" "<<si<< " "<< endl;
+  
+  
+    aConstraintIsViolated = (si < 0) || aConstraintIsViolated;
     constraintViolation[j] = max(si, 0);
     P += si;
     }
   // Technically we should add 
   
+  if (aConstraintIsViolated){
+    cout << "A constraint is violated"<< endl;
+  }else{
+    cout<<"No constraint is violated, this is GREAT !!!"<<endl;
+  }
   total += P;
+
+  
 
   return total;
 }
 
 Solution Configuration::generateSol(){
 
+  
   Solution result = Solution(this-> n, this ->m);
 
   for (int i = 0; i < this->n; i++){
-
+    
     int bestAffectation = 0;
     for (int j = 0; j < this -> m; j++){
 
       if (c[j][i] < c[bestAffectation][i]){
-
+        
         bestAffectation = j;
 
       }
     }
+
+    
     result.affectation[i] = bestAffectation;
+   
   }
 
-// Then it is evident that the cost of this solution is a inferior bound for the solution of the problem, but probably it does not match the constraints
+  // Then it is evident that the cost of this solution is a inferior bound for the solution of the problem, but probably it does not match the constraints
+  return result;
 }

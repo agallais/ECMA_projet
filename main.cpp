@@ -104,25 +104,33 @@ Configuration* readDataFile(char* nom_de_fichier){
 
 int main(int argv, char** args){
 
-  bool DEBUG = true;
+  bool DEBUG = false;
 
-  char fileName[] = "data/GAP-a10100.dat";
+  char fileName[] = "data/GAP-d801600.dat";
 
   Configuration* config  = readDataFile(fileName);
 
   if(DEBUG){
     config->print();
    }
-  // NOw starts the tabu search
+  // Now starts the tabu search
 
   //First find an admissible solution
   Solution sol = config -> generateSol();
 
+
+
   vector<Solution> tabuList = vector<Solution>();
   //Second find a way to improve it
   
+  /* The value of this int should never go up*/
+
+  
   int threshold = config -> cost(sol);
   
+
+
+  //
   
   return 0;
 }
