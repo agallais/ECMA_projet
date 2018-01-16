@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "configuration.h"
-#include "Solution.h"
+#include "solution.h"
 
 using namespace std;
 //First a bunch of utilitarian functions :
@@ -116,14 +116,13 @@ int main(int argv, char** args){
   // NOw starts the tabu search
 
   //First find an admissible solution
-  Solution sol = Solution(config->n, config->m);
-
-  sol.generate();
+  Solution sol = config -> generateSol();
 
   vector<Solution> tabuList = vector<Solution>();
-
-
-
-//Second find a way to improve it
+  //Second find a way to improve it
+  
+  int threshold = config -> cost(sol);
+  
+  
   return 0;
 }
