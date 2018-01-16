@@ -82,7 +82,7 @@ int Configuration::cost(Solution sol){
     }
    
 
-  // There should be a rho to multiply the P
+  // There should be a \rho to multiply the P
   total += P;
 
   
