@@ -46,6 +46,7 @@ int Configuration::cost(Solution sol){
   for(int i = 0; i < this-> n; i++){
 
     total += c[sol.affectation[i]][i];
+  
   }
 
 
@@ -69,22 +70,25 @@ int Configuration::cost(Solution sol){
 
     }
   
-    int si = b[j] - totalForLignJ;
+    int si =  totalForLignJ - b[j];
     
-    cout<< totalForLignJ<<" "<<si<< " "<< endl;
+    //cout<< totalForLignJ<<" "<<si<< " "<< endl;
   
   
-    aConstraintIsViolated = (si < 0) || aConstraintIsViolated;
+    aConstraintIsViolated = (si > 0) || aConstraintIsViolated;
     constraintViolation[j] = max(si, 0);
-    P += si;
+    P += max(si, 0);
+
     }
   // Technically we should add 
   
   if (aConstraintIsViolated){
-    cout << "A constraint is violated"<< endl;
+    //cout << "A constraint is violated"<< endl;
   }else{
-    cout<<"No constraint is violated, this is GREAT !!!"<<endl;
+    //cout<<"No constraint is violated, this is GREAT !!!"<<endl;
   }
+
+  // There should be a rho to multiply the P
   total += P;
 
   

@@ -106,7 +106,7 @@ int main(int argv, char** args){
 
   bool DEBUG = false;
 
-  char fileName[] = "data/GAP-d801600.dat";
+  char fileName[] = "data/GAP-a05100.dat";
 
   Configuration* config  = readDataFile(fileName);
 
@@ -119,17 +119,45 @@ int main(int argv, char** args){
   Solution sol = config -> generateSol();
 
 
-
+  //Now we store a number of solutions already explored
   vector<Solution> tabuList = vector<Solution>();
-  //Second find a way to improve it
-  
-  /* The value of this int should never go up*/
 
+  tabuList.push_back(sol);
   
   int threshold = config -> cost(sol);
   
+  Solution bestSolSoFar = sol;
+  //Second find a way to improve it
+  
+ 
+ for( int loop = 0; loop < 10; ++loop){
+
+  sol = bestSolSoFar;
+
+  for(int i = 0; i < config -> n; i++){
+    for(int j = 0; j < config -> n; j++){
+      if( i != j){
+        Solution candidat = sol.swap(i,j);
+        if(config -> cost(candidat) < threshold){
+          threshold = config -> cost(candidat);
+          //cout << "Better candidate found : "<<threshold<<  endl;
+          bestSolSoFar = candidat;
+        }
+      }
+    }
+  }
+
+ }
 
 
+
+  /* The value of this int should never go up*/
+
+  
+  
+cout << threshold << endl;
+
+bestSolSoFar.print();
   //
   
   return 0;

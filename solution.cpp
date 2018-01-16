@@ -15,15 +15,43 @@ Solution::Solution(int n_jobs, int n_machines){
 
 
     
-    void Solution::swap(int jobA, int jobB){
+    Solution Solution::swap(int jobA, int jobB){
         int swapMachine = this-> affectation[jobA];
-        this-> affectation[jobA] = this->affectation[jobB];
-        this-> affectation[jobB] = swapMachine;
-        return;
+        
+        Solution swappedSolution = Solution(this-> numberOfJobs, this->numberOfMAchines);
+        for(int i = 0; i < this-> numberOfJobs; ++i){
+            swappedSolution.affectation[i] = this->affectation[i];
+        }
+        swappedSolution.affectation[jobA] = swappedSolution.affectation[jobB];
+        swappedSolution.affectation[jobB] = swapMachine;
+        return swappedSolution;
     };
+
+
     void Solution::shift(int i){
         
         
+        return ;
+    };
+
+    void Solution::print(){
+        
+        for( int i = 0 ; i < this->numberOfJobs; ++i){
+            cout << this->affectation[i] << " ";
+        }
+        cout <<endl;
+
+        for(int j = 0 ; j < this->numberOfMAchines; j++){
+            cout << "Machine "<< j << endl;
+            for( int i = 0 ; i < this->numberOfJobs; ++i){
+            if(this->affectation[i] == j){
+            cout << i << " ";
+            }
+        
+        }
+        cout << endl;
+        }
+
         return;
     };
 

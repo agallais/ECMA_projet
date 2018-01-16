@@ -18,7 +18,10 @@ class Solution{
     Solution(int n_jobs, int n_machines);
 
 
-    void swap(int i, int j);
+    Solution swap(int i, int j);
+    
+    void print();
+
     void shift(int i);
 
     void generate();
