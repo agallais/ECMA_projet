@@ -22,7 +22,7 @@ Even if old, I think it is still quite actual. If you have any suggestion of a m
 
 For more on the Tabu search I think that the main ressource is Glover 86 : Future Paths for integer programming and links to artificial intelligence, by Fred Glover in 1986
 
-## To Build
+## How to build the project ?
  To Build the project I used :
 ```
 g++ main.cpp solution.cpp configuration.cpp -o tabuSearch.exe
