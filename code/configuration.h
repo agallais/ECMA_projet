@@ -30,6 +30,8 @@ Configuration(int n_machines, int n_jobs , vector<vector<int> > cost,vector<vect
 // This function is to compute the cost for the heuristic problem, not the cost in the sense of the master problem
 int cost(Solution solution);
 
+int trueCost(Solution solution);
+
 Solution generateSol();
 
 // To display the main points of the configuration

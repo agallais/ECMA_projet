@@ -128,8 +128,10 @@ int main(int argv, char** args){
   
   Solution bestSolSoFar = sol;
   //Second find a way to improve it
-  
+  //For now the swap is working OK, but we need to be able to shift a job from a machine to another 
  
+
+
  for( int loop = 0; loop < 10; ++loop){
 
   sol = bestSolSoFar;
@@ -146,6 +148,9 @@ int main(int argv, char** args){
       }
     }
   }
+  //TODO : something intelligent with the shift thing 
+  // Now that we have  
+
 
  }
 

@@ -54,8 +54,7 @@ int Configuration::cost(Solution sol){
 
   int P = 0;
   
-  vector<int> constraintViolation = vector<int>(this->m);
-
+  
   bool aConstraintIsViolated = false;
   
   for (int j = 0; j < this->m; j++){
@@ -76,17 +75,12 @@ int Configuration::cost(Solution sol){
   
   
     aConstraintIsViolated = (si > 0) || aConstraintIsViolated;
-    constraintViolation[j] = max(si, 0);
+    sol.violationOfConstraint[j] = max(si, 0);
+    
     P += max(si, 0);
 
     }
-  // Technically we should add 
-  
-  if (aConstraintIsViolated){
-    //cout << "A constraint is violated"<< endl;
-  }else{
-    //cout<<"No constraint is violated, this is GREAT !!!"<<endl;
-  }
+   
 
   // There should be a rho to multiply the P
   total += P;
@@ -95,6 +89,18 @@ int Configuration::cost(Solution sol){
 
   return total;
 }
+
+int Configuration::trueCost(Solution sol){
+
+  int total = 0;
+
+  for(int i = 0; i < this-> n; i++){
+
+    total += c[sol.affectation[i]][i];
+  
+  }
+}
+
 
 Solution Configuration::generateSol(){
 

@@ -6,8 +6,12 @@ using namespace std;
 
 Solution::Solution(int n_jobs, int n_machines){
         this -> affectation = vector<int> (n_jobs);
+        this -> violationOfConstraint = vector<int> (n_machines);
         for (int i = 0; i < n_jobs; i++){
             this-> affectation[i] = 0;
+        }
+        for (int j = 0; j < n_machines; j++){
+            this-> affectation[j] = 0;
         }
         this->numberOfJobs = n_jobs;
         this->numberOfMAchines = n_machines;
@@ -28,8 +32,9 @@ Solution::Solution(int n_jobs, int n_machines){
     };
 
 
-    void Solution::shift(int i){
-        
+    void Solution::shift(int job, int machine){
+
+        this-> affectation[i] = machine;
         
         return ;
     };
