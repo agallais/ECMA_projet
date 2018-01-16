@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Solution.h"
+#include "solution.h"
 
 using namespace std;
 
@@ -15,7 +15,9 @@ class Configuration{
 public :
 
 //This must go private
+// n is machines, m is jobs
 int n;
+
 int m;
 vector<vector<int> > c;
 vector<vector<int> > a;
@@ -24,9 +26,14 @@ vector<int>  b;
 
 Configuration(int n_machines, int n_jobs , vector<vector<int> > cost,vector<vector<int> > a, vector<int> bound );
 
+
+// This function is to compute the cost for the heuristic problem, not the cost in the sense of the master problem
 int cost(Solution solution);
+Solution generateSol();
+
 // To display the main points of the configuration
 void print();
+
 
 };
 #endif
