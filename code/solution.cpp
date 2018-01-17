@@ -11,10 +11,11 @@ Solution::Solution(int n_jobs, int n_machines){
             this-> affectation[i] = 0;
         }
         for (int j = 0; j < n_machines; j++){
-            this-> affectation[j] = 0;
+            this-> violationOfConstraint[j] = 0;
         }
         this->numberOfJobs = n_jobs;
         this->numberOfMAchines = n_machines;
+        //cout << "Constructor OK" << endl;
     }
 
 
@@ -34,7 +35,7 @@ Solution::Solution(int n_jobs, int n_machines){
 
     void Solution::shift(int job, int machine){
 
-        this-> affectation[i] = machine;
+        this-> affectation[job] = machine;
         
         return ;
     };

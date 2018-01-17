@@ -21,10 +21,10 @@ Configuration::Configuration(int n_machines, int n_jobs , vector<vector<int> > c
 void Configuration::print(){
   cout << "n = " << this -> n <<endl;
   cout << "m = " << this -> m <<endl;
-  cout << "a =" ;
+  cout << "c =" ;
   for(int j = 0; j < m ; j ++){
     for(int i = 0; i < n ; ++i){
-      cout << a[j][i] << " ";
+      cout << c[j][i] << " ";
     }
     cout << endl;
   }
@@ -104,26 +104,29 @@ int Configuration::trueCost(Solution sol){
 
 Solution Configuration::generateSol(){
 
+
   
   Solution result = Solution(this-> n, this ->m);
+  
 
   for (int i = 0; i < this->n; i++){
     
     int bestAffectation = 0;
     for (int j = 0; j < this -> m; j++){
-
-      if (c[j][i] < c[bestAffectation][i]){
+      
+      if (this->c[j][i] < this->c[bestAffectation][i]){
         
         bestAffectation = j;
 
       }
     }
-
     
     result.affectation[i] = bestAffectation;
+    
    
   }
 
   // Then it is evident that the cost of this solution is a inferior bound for the solution of the problem, but probably it does not match the constraints
   return result;
 }
+
