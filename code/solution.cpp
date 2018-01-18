@@ -19,10 +19,21 @@ Solution::Solution(int n_jobs, int n_machines){
     }
 
 
-    
+bool Solution::isEqual(Solution sol){
+  // We just need to check if the two vectors are equals. It is not enough, but should work to get improvement
+  bool result = true;
+  std::vector<int>::iterator solIterator = sol.affectation.begin();
+  for(std::vector<int>::iterator v = this-> affectation.begin(); v != this.affectation.end(); v++){
+    std::cout << *solIterator << '\n';
+    std::cout << *v << '\n';
+  }
+  return true;
+
+};
+
     Solution Solution::swap(int jobA, int jobB){
         int swapMachine = this-> affectation[jobA];
-        
+
         Solution swappedSolution = Solution(this-> numberOfJobs, this->numberOfMAchines);
         for(int i = 0; i < this-> numberOfJobs; ++i){
             swappedSolution.affectation[i] = this->affectation[i];
@@ -36,12 +47,12 @@ Solution::Solution(int n_jobs, int n_machines){
     void Solution::shift(int job, int machine){
 
         this-> affectation[job] = machine;
-        
+
         return ;
     };
 
     void Solution::print(){
-        
+
         for( int i = 0 ; i < this->numberOfJobs; ++i){
             cout << this->affectation[i] << " ";
         }
@@ -53,7 +64,7 @@ Solution::Solution(int n_jobs, int n_machines){
             if(this->affectation[i] == j){
             cout << i << " ";
             }
-        
+
         }
         cout << endl;
         }
@@ -64,4 +75,3 @@ Solution::Solution(int n_jobs, int n_machines){
     void Solution::generate(){
         return;
     };
-
