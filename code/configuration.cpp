@@ -40,7 +40,7 @@ void Configuration::print()
   return;
 }
 
-int Configuration::cost(Solution sol, float rho)
+int Configuration::cost(Solution& sol, float rho)
 {
 
   int total = 0;
@@ -67,16 +67,17 @@ int Configuration::cost(Solution sol, float rho)
 
       if (sol.affectation[i] == j)
       {
-        totalForLignJ += a[j][i];
+        totalForLignJ += this->a[j][i];
       }
     }
 
-    int si = totalForLignJ - b[j];
+    int si = totalForLignJ - this->b[j];
 
     //cout<< totalForLignJ<<" "<<si<< " "<< endl;
 
     aConstraintIsViolated = (si > 0) || aConstraintIsViolated;
-    sol.violationOfConstraint[j] = max(si, 0);
+    sol.violationOfConstraint[j] = si;
+    //cout<< si << endl;
 
     P += max(si, 0);
   }
@@ -97,6 +98,7 @@ int Configuration::trueCost(Solution sol)
 
     total += c[sol.affectation[i]][i];
   }
+  return total;
 }
 
 Solution Configuration::generateSol()
@@ -123,4 +125,54 @@ Solution Configuration::generateSol()
 
   // Then it is evident that the cost of this solution is a inferior bound for the solution of the problem, but probably it does not match the constraints
   return result;
+}
+
+
+void Configuration::improveConstraints(Solution solution){
+
+  int violation = solution.violationOfConstraint[0];
+  int indexOfConstraint = 0;
+  for (int j = 1; j < solution.numberOfMAchines; j++)
+  {
+
+    if (solution.violationOfConstraint[j] > violation)
+    {
+      violation = solution.violationOfConstraint[j];
+      indexOfConstraint = j;
+    }
+  }
+
+  // Ensuite trouver x i j tel que x_ij = 1 et aij est important
+
+  int indexOfJob = -1;
+  int aij = 0;
+  for (int i = 1; i < this->n; i++)
+  {
+    if (this->a[indexOfConstraint][i] > aij && solution.affectation[i] == indexOfConstraint)
+    {
+      indexOfJob = i;
+      aij = this->a[indexOfConstraint][i];
+    }
+  }
+
+  //Then find the second smallest cost for this job
+
+  int costOfTheJob = 15000000;
+
+  // In fact the "tabu" search reveals useful here precisely
+
+  // In fact the "tabu" search reveals useful here precisely
+  int bestMachine = indexOfConstraint;
+
+  for (int j = 0; j < this->m; j++)
+  {
+    if (this->c[j][indexOfJob] < costOfTheJob && j != indexOfConstraint)
+    {
+      bestMachine = j;
+      costOfTheJob = this->c[j][indexOfJob];
+    }
+  }
+  //Now we can proceed to the shift of the indexOfJob job to the bestMachine machine
+
+  solution.shift(indexOfJob, bestMachine);
 }

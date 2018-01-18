@@ -118,7 +118,8 @@ Configuration *readDataFile(char *nom_de_fichier)
 int main(int argv, char **args)
 {
 
-  bool DEBUG = true;
+cout<< "Hello"<< endl;
+  bool DEBUG = false;
 
   //IloEnv env;
   try
@@ -127,15 +128,21 @@ int main(int argv, char **args)
 
     //IloNumVarArray var(env);
     //IloRangeArray con(env);
-    //cout << "First step"<< endl;
 
-    char fileName[] = "../data/GAP-a05100.dat";
+    cout << args[0] << endl;
+    char fileName[] = args[0];
+
+
+
+    // best sol for GAP-a05100.dat is 1678
+
     //Configuration* config  = readDataFile(fileName,model, var, con);
     Configuration *config = readDataFile(fileName);
+
     //cout<< "Everything OK"<< endl;
     if (DEBUG)
     {
-      config->print();
+      //      config->print();
     }
     // Now starts the tabu search
 
@@ -148,7 +155,7 @@ int main(int argv, char **args)
 
 
     vector<Solution> tabuList = vector<Solution>();
-
+    vector<pair<int,int> > tabuShiftList = std::vector<pair<int,int> >();
     tabuList.push_back(sol);
 
     float rho = 1.5;
@@ -162,7 +169,7 @@ int main(int argv, char **args)
     //cout << "OK until now"<< endl;
     cout << config->trueCost(sol) << endl;
 
-    for (int loop = 0; loop < 10; ++loop)
+    for (int loop = 0; loop < 15; ++loop)
     {
 
       sol = bestSolSoFar;
@@ -178,83 +185,82 @@ int main(int argv, char **args)
             if (config->cost(candidat, rho) < threshold)
             {
               threshold = config->cost(candidat, rho);
-
-              cout << "Better candidate found : " << threshold << endl;
-
+              if(DEBUG){
+                cout << "Better candidate found : " << threshold << endl;
+              }
               bestSolSoFar = candidat;
             }
           }
         }
       }
-      //TODO : something intelligent with the shift thing
-      // Now that we have
 
-      //Now we look at the maximum of the constraint violation
-      int violation = bestSolSoFar.violationOfConstraint[0];
-      int indexOfConstraint = 0;
-      for (int j = 1; j < config->m; j++)
-      {
+      config->cost(bestSolSoFar, rho);
 
-        if (bestSolSoFar.violationOfConstraint[j] > violation)
-        {
-          violation = bestSolSoFar.violationOfConstraint[j];
-          indexOfConstraint = j;
+      if(bestSolSoFar.isAConstraintViolated()){
+        //      cout<<"Hello2"<< endl;
+        config->improveConstraints(bestSolSoFar);
+
+        if(DEBUG){
+          std::cout << "Now the violated constraints : " << '\n';
+
+          for(std::vector<int>::iterator v = sol.violationOfConstraint.begin();v != sol.violationOfConstraint.end(); ++v){
+            std::cout << *v << '\n';
+          }
         }
+      }else{
+        //TODO now we should decribe what the heuristic should do, would the solution be feasible already
+
+        //First find the job that costs the more
+        // In fact we should try to look for a serie of interesting moves
+        config->cost(bestSolSoFar, rho);
+        int improvement = 0;
+        bool thereIsAnImprovement = false;
+        int jobOfInterest = 0;
+        int machineOfInterest = 0;
+
+        for(int i = 0; i < config-> n; ++i){
+          for(int j = 0; j < config-> m; ++j){
+            if(config->c[bestSolSoFar.affectation[i]][i] - config->c[j][i] > improvement && ( bestSolSoFar.violationOfConstraint[j]  + config -> a[j][i] < 0  )){
+
+              improvement = config->c[bestSolSoFar.affectation[i]][i] - config->c[j][i];
+              jobOfInterest = i;
+              machineOfInterest = j;
+              thereIsAnImprovement = true;
+            }
+          }
+        }
+        //bestSolSoFar.print();
+        std::cout << config -> cost(bestSolSoFar, rho) << '\n';
+        std::cout << "Expected gain : " << improvement<<'\n';
+
+        if(thereIsAnImprovement){
+          bestSolSoFar.shift(jobOfInterest, machineOfInterest);
+          tabuShiftList.push_back(pair<int,int>(jobOfInterest,machineOfInterest));
+        }
+        // END ELSE
       }
 
-      // Ensuite trouver x i j tel que x_ij = 1 et aij est important
+      std::cout<< config->cost(bestSolSoFar, rho) << endl;
+      threshold = config->cost(bestSolSoFar, rho);
+      if (rho < 10000000){
+        rho = 2 * rho;}
 
-      int indexOfJob = -1;
-      int aij = 0;
-      for (int i = 1; i < config->n; i++)
-      {
-        if (config->a[indexOfConstraint][i] > aij && bestSolSoFar.affectation[i] == indexOfConstraint)
-        {
-          indexOfJob = i;
-          aij = config->a[indexOfConstraint][i];
-        }
+        //std::cout << "Now rho is equal to : " << rho <<  std::endl;
+
       }
 
-      //Then find the second smallest cost for this job
+      /* The value of this int should never go up*/
 
-      int costOfTheJob = 15000000;
+      threshold = config->cost(bestSolSoFar, rho);
 
-      // In fact the "tabu" search reveals useful here precisely
-
-      // In fact the "tabu" search reveals useful here precisely
-      int bestMachine = indexOfConstraint;
-
-      for (int j = 0; j < config->m; j++)
-      {
-        if (config->c[j][indexOfJob] < costOfTheJob && j != indexOfConstraint)
-        {
-          bestMachine = j;
-          costOfTheJob = config->c[j][indexOfJob];
-        }
-      }
-      //Now we can proceed to the shift of the indexOfJob job to the bestMachine machine
-
-      sol.shift(indexOfJob, bestMachine);
-
-      std::cout<< config->cost(sol, rho) << endl;
-
-      rho = 2 * rho;
-
-      std::cout << "Now rho is equal to : " << rho <<  std::endl;
-      int function_this_way;
-      std::cin >> function_this_way;
+      //cout << "Best Solution is : "<< threshold << endl;
 
 
+      cout << "Cost of best Solution found : "<< config->cost(bestSolSoFar, rho)<< endl;
+      bestSolSoFar.print();
+      return 0;
     }
-
-    /* The value of this int should never go up*/
-
-    cout << threshold << endl;
-
-    bestSolSoFar.print();
-    return 0;
-  }
-  /*catch (IloException& e) {
+    /*catch (IloException& e) {
     cerr << "Concert exception caught: " << e << endl;
   }*/
   catch (...)

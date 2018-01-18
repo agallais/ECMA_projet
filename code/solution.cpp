@@ -23,13 +23,13 @@ bool Solution::isEqual(Solution sol){
   // We just need to check if the two vectors are equals. It is not enough, but should work to get improvement
   bool result = true;
   std::vector<int>::iterator solIterator = sol.affectation.begin();
-  for(std::vector<int>::iterator v = this-> affectation.begin(); v != this.affectation.end(); v++){
+  for(std::vector<int>::iterator v = this-> affectation.begin(); v != this->affectation.end(); v++){
     std::cout << *solIterator << '\n';
     std::cout << *v << '\n';
   }
-  return true;
+  return result;
 
-};
+}
 
     Solution Solution::swap(int jobA, int jobB){
         int swapMachine = this-> affectation[jobA];
@@ -41,7 +41,7 @@ bool Solution::isEqual(Solution sol){
         swappedSolution.affectation[jobA] = swappedSolution.affectation[jobB];
         swappedSolution.affectation[jobB] = swapMachine;
         return swappedSolution;
-    };
+    }
 
 
     void Solution::shift(int job, int machine){
@@ -49,7 +49,7 @@ bool Solution::isEqual(Solution sol){
         this-> affectation[job] = machine;
 
         return ;
-    };
+    }
 
     void Solution::print(){
 
@@ -69,9 +69,28 @@ bool Solution::isEqual(Solution sol){
         cout << endl;
         }
 
+        for(int j = 0 ; j < this->numberOfMAchines; j++){
+          std::cout<< this->violationOfConstraint[j] << endl;
+        }
+
         return;
-    };
+    }
+
+    bool Solution::isAConstraintViolated(){
+      bool result = false;
+      for(int i = 0; i < this->numberOfMAchines; i++){
+        if(this->violationOfConstraint[i] > 0){
+          result = true;
+          return true;
+        }
+      }
+      return result;
+    }
+
+
+
+
 
     void Solution::generate(){
         return;
-    };
+    }

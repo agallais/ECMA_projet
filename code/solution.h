@@ -23,6 +23,8 @@ class Solution
 
     bool isEqual(Solution sol);
 
+    bool isAConstraintViolated();
+
     void print();
 
     void shift(int job, int machine);
